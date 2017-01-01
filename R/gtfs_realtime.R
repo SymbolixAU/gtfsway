@@ -23,6 +23,4 @@ gtfs_realtime <- function(response){
 	VehicleDescriptor <- read(transit_realtime.VehicleDescriptor, b)
 	VehiclePosition <- read(transit_realtime.VehiclePosition, b)
 
-
-
 }

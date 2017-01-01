@@ -4,7 +4,7 @@
 \alias{get_gtfs}
 \title{Get gtfs}
 \usage{
-get_gtfs(url)
+get_gtfs(url, extract = TRUE)
 }
 \arguments{
 \item{url}{link to GTFS .zip}

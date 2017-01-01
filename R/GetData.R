@@ -2,8 +2,13 @@
 #'
 #' Downloads and extracts GTFS static data
 #' @param url link to GTFS .zip
+#' @param exctract logical indicating if the files should be extracted as data.frames into the global environment. If \code{FALSE} a list of data.frames is returned. If \code{TRUE} data.frames for each file are extracted into the Global Environment.
 #' @return list of dataframes, one for each .txt file
-get_gtfs <- function(url){
+#' @export
+get_gtfs <- function(url, extract = TRUE){
+
+	if(!is.logical(extract))
+		stop("extract must be either TRUE or FALSE")
 
 	temp_file <- tempfile()
 	download.file(url, destfile = temp_file, mode = "wb")
@@ -14,24 +19,27 @@ get_gtfs <- function(url){
 	files <- unzip(temp_file, list = T)
 	zipFiles <- files[grepl("\\.zip$", files$Name), ]
 
-	## if 'files' is a data.frame with a column of '.txt' files, we can use it!
-
+	## extract all the .txt files
 	lst <- apply(files, 1, function(x){
-		## extract all the .txt files
 		if(grepl("\\.txt$", x["Name"])){
-			lst <- list(file = x["Name"],
-									data = read.csv(unz(temp_file, x["Name"]), stringsAsFactors = F)
-									)
+			fileName <- gsub("\\.txt$", "", x["Name"])
+			lst <- list(read.csv(unz(temp_file, x["Name"]), stringsAsFactors = F))
+			names(lst) <- fileName
+			return(lst)
 		}else{
-			lst <- list()
+			return()
 		}
-		return(lst)
 	})
 
 	unlink(temp_file)
 	unlink(zipDir)
 
-	return(lst)
-
+	if(extract){
+		for(i in seq_along(lst)){
+			assign(paste0("dt_", names(lst[[i]])), lst[[i]][[1]], envir = .GlobalEnv)
+		}
+	}else{
+		return(lst)
+	}
 }
 
