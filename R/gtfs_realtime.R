@@ -13,7 +13,7 @@ gtfs_realtime <- function(response){
 	FeedEntity <- read(transit_realtime.FeedEntity, b)
 	FeedHeader <- read(transit_realtime.FeedHeader, b)
 	FeedMessage <- read(transit_realtime.FeedMessage, b)
-	Position <- read(transit_realtime.Position, b)
+	VehiclePosition <- read(transit_realtime.Position, b)
 	TimeRange <- read(transit_realtime.TimeRange, b)
 	TranslatedString <- read(transit_realtime.TranslatedString, b)
 	TripDescriptor <- read(transit_realtime.TripDescriptor, b)
