@@ -8,6 +8,8 @@ get_gtfs(url, extract = TRUE)
 }
 \arguments{
 \item{url}{link to GTFS .zip}
+
+\item{exctract}{logical indicating if the files should be extracted as data.frames into the global environment. If \code{FALSE} a list of data.frames is returned. If \code{TRUE} data.frames for each file are extracted into the Global Environment.}
 }
 \value{
 list of dataframes, one for each .txt file

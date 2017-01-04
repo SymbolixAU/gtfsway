@@ -91,7 +91,7 @@
 # 		})
 # 		dt_stop_time_update <- data.table::rbindlist(stop_time_update, use.names = T, fill = T)
 # 	}else{
-# 		dt_stop_time_udpate <- data.table::data.table()
+# 		dt_stop_time_update <- data.table::data.table()
 # 	}
 #
 # 	dt_trip_info <- data.table::data.table(trip_id = trip_id,

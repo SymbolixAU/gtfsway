@@ -10,7 +10,8 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports:
-    RProtoBuf
+    RProtoBuf,
+    data.table (>= 1.9.8)
 BugReports: https://github.com/SymbolixAU/gtfsway/issues
 RoxygenNote: 5.0.1
 Suggests: knitr,
