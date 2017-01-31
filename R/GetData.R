@@ -2,7 +2,7 @@
 #'
 #' Downloads and extracts GTFS static data
 #' @param url link to GTFS .zip
-#' @param exctract logical indicating if the files should be extracted as data.frames into the global environment. If \code{FALSE} a list of data.frames is returned. If \code{TRUE} data.frames for each file are extracted into the Global Environment.
+#' @param extract logical indicating if the files should be extracted as data.frames into the global environment. If \code{FALSE} a list of data.frames is returned. If \code{TRUE} data.frames for each file are extracted into the Global Environment.
 #' @return list of dataframes, one for each .txt file
 #' @export
 get_gtfs <- function(url, extract = TRUE){
@@ -36,7 +36,7 @@ get_gtfs <- function(url, extract = TRUE){
 
 	if(extract){
 		for(i in seq_along(lst)){
-			assign(paste0("dt_", names(lst[[i]])), lst[[i]][[1]], envir = .GlobalEnv)
+			data.table::setDT(assign(paste0("dt_", names(lst[[i]])), lst[[i]][[1]], envir = .GlobalEnv))
 		}
 	}else{
 		return(lst)

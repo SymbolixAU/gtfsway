@@ -72,81 +72,6 @@
 # FeedMessage$entity[[5]]$trip_update$trip$trip_id
 # FeedMessage$entity[[5]]$trip_update$stop_time_update[[1]]$departure[[3]]
 #
-# lst <- lapply(FeedMessage$entity, function(x){
-# 	trip_id = x[['trip_update']][['trip']][['trip_id']]
-# 	start_time = x[['trip_update']][['trip']][['start_time']]
-# 	start_date = x[['trip_update']][['trip']][['start_date']]
-# 	route_id = x[['trip_update']][['trip']][['route_id']]
-# 	stop_time_update <- x[['trip_update']][['stop_time_update']]
-#
-# 	if(length(stop_time_update) > 0){
-#
-# 		stop_time_update <- lapply(stop_time_update, function(y){
-# 			return(data.table::data.table(
-# 				stop_sequence = y[['stop_sequence']],
-# 				stop_id = y[['stop_id']],
-# 				arrival_time = y[['arrival']][['time']],
-# 				departure_time = y[['departure']][['time']]
-# 			))
-# 		})
-# 		dt_stop_time_update <- data.table::rbindlist(stop_time_update, use.names = T, fill = T)
-# 	}else{
-# 		dt_stop_time_update <- data.table::data.table()
-# 	}
-#
-# 	dt_trip_info <- data.table::data.table(trip_id = trip_id,
-# 														 start_time = start_time,
-# 														 start_date = start_date,
-# 														 route_id = route_id)
-#
-# 	return(list(dt_trip_info = dt_trip_info,
-# 							dt_stop_time_update = dt_stop_time_update))
-#
-# })
-#
-#
-#
-#
-# str(message)
-#
-# writeLines( as.character( message ) )
-#
-# writeLines(as.character(message$stop_time_update[[1]]))
-#
-# message$stop_time_update[[129]]$stop_id
-#
-# message$stop_time_update[[2]]$schedule_relationship
-# message$stop_time_update[[2]]$stop_sequence
-# message$stop_time_update[[2]]$stop_id
-# message$stop_time_update[[2]]$arrival
-# message$stop_time_update[[2]]$departure
-#
-# length(message$stop_time_update)
-#
-# message$stop_time_update[[240]]$departure
-#
-# length(message$stop_time_update)
-#
-# writeLines(as.character(message$stop_time_update[[251]]$departure))
-#
-# message$stop_time_update[[251]]$departure
-#
-# message$as.character()
-#
-# writeLines(message$toString())
-#
-# message$toString()
-#
-# transit_realtime.TripUpdate$as.list()
-#
-# transit_realtime.TripUpdate$StopTimeUpdate$toString()
-
-
-#
-# ## http://transitfeeds.com/p/ptv/497
-#
-# ## melbourne
-# url <- "http://transitfeeds.com/p/ptv/497/latest/download"
 #
 #
 # ## portland
@@ -191,3 +116,22 @@
 # dt_stoptimes <- lst[[8]]$data
 # setDT(dt_stoptimes)
 #
+#
+# library(data.table)
+# gtfs_url <- "https://transitfeeds.com/p/translink/21/latest/download"
+# lst_gtfs <- get_gtfs(gtfs_url, extract = TRUE)
+#
+#
+# url <- "https://gtfsrt.api.translink.com.au/Feed/SEQ"
+# response <- httr::GET(url)
+#
+# FeedMessage <- gtfs_realtime(response)
+# lst <- gtfs_tripUpdates(FeedMessage)
+#
+# lst[[45]]
+
+
+##
+
+
+
