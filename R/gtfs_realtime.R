@@ -1,8 +1,9 @@
 #' GTFS real time
 #'
-#' Parses the response from a GTFS real-time feed
+#' Parses the raw response from a GTFS real-time feed
 #'
 #' @param response binary response body
+#' @param content String specifying which section of the response to return
 #' @return FeedMessage RProtoBuf object containing the feed message
 #' @examples
 #' \dontrun{
@@ -13,39 +14,54 @@
 #' httr::accept_json(),
 #' httr::add_headers('Authorization' = ''))
 #'
-#' feed <- gtfs_realtime(response)
+#' feed <- gtfs_realtime(response, content = "FeedMessage")
 #'
 #' }
 #' @export
-gtfs_realtime <- function(response){
+gtfs_realtime <- function(response, content = c("FeedMessage",
+																								"Alert",
+																								"EntitySelector",
+																								"FeedEntity",
+																								"FeedHeader",
+																								"VehiclePosition",
+																								"TimeRange",
+																								"TranslateedString",
+																								"TripDescriptor",
+																								"TripUpdate",
+																								"TripUpdate.StopTimeEvent",
+																								"TripUpdate.StopTimeUpdate",
+																								"VehicleDescriptor",
+																								"Vehicle")){
+
+	content <- match.arg(content)
+
+	validate_response(response)
 
 	b <- readBin(response$content, raw(0), length(response$content) )
 
-	# Alert <- RProtoBuf::read(transit_realtime.Alert, b)
-	# EntitySelector <- RProtoBuf::read(transit_realtime.EntitySelector, b)
-	# FeedEntity <- RProtoBuf::read(transit_realtime.FeedEntity, b)
-	# FeedHeader <- RProtoBuf::read(transit_realtime.FeedHeader, b)
-	FeedMessage <- RProtoBuf::read(transit_realtime.FeedMessage, b)
-	# VehiclePosition <- RProtoBuf::read(transit_realtime.Position, b)
-	# TimeRange <- RProtoBuf::read(transit_realtime.TimeRange, b)
-	# TranslatedString <- RProtoBuf::read(transit_realtime.TranslatedString, b)
-	# TripDescriptor <- RProtoBuf::read(transit_realtime.TripDescriptor, b)
-	# TripUpdate <- RProtoBuf::read(transit_realtime.TripUpdate, b)
-	# TripUpdate.StopTimeEvent <- RProtoBuf::read(transit_realtime.TripUpdate.StopTimeEvent, b)
-	# TripUpdate.StopTimeUpdate <- RProtoBuf::read(transit_realtime.TripUpdate.StopTimeUpdate, b)
-	# VehicleDescriptor <- RProtoBuf::read(transit_realtime.VehicleDescriptor, b)
-	# VehiclePosition <- RProtoBuf::read(transit_realtime.VehiclePosition, b)
-
-	## return objects (s4) of all these, then call various methods to extract useful data
-
-	return(FeedMessage)
-
+	res <- switch(content,
+								"Alert" = RProtoBuf::read(transit_realtime.Alert, b),
+								"EntitySelector" = RProtoBuf::read(transit_realtime.EntitySelector, b),
+								"FeedEntity" = RProtoBuf::read(transit_realtime.FeedEntity, b),
+								"FeedHeader" = RProtoBuf::read(transit_realtime.FeedHeader, b),
+								"FeedMessage" = RProtoBuf::read(transit_realtime.FeedMessage, b),
+								"VehiclePosition" = RProtoBuf::read(transit_realtime.Position, b),
+								"TimeRange" = RProtoBuf::read(transit_realtime.TimeRange, b),
+								"TranslatedString" = RProtoBuf::read(transit_realtime.TranslatedString, b),
+								"TripDescriptor" = RProtoBuf::read(transit_realtime.TripDescriptor, b),
+								"TripUpdate" = RProtoBuf::read(transit_realtime.TripUpdate, b),
+								"TripUpdate.StopTimeEvent" = RProtoBuf::read(transit_realtime.TripUpdate.StopTimeEvent, b),
+								"TripUpdate.StopTimeUpdate" = RProtoBuf::read(transit_realtime.TripUpdate.StopTimeUpdate, b),
+								"VehicleDescriptor" = RProtoBuf::read(transit_realtime.VehicleDescriptor, b),
+								"VehiclePosition" = RProtoBuf::read(transit_realtime.VehiclePosition, b)
+	)
+	return(res)
 }
 
 
 #' GTFS Trip Updates
 #'
-#' Returns a list of trip update information
+#' Returns a list of trip update information given a FeedMessage input
 #'
 #' @param FeedMessage returned from \link{gtfs_realtime}
 #' @return list of \code{data.table} trip update tables
@@ -59,12 +75,16 @@ gtfs_realtime <- function(response){
 #' httr::accept_json(),
 #' httr::add_headers('Authorization' = ''))
 #'
-#' FeedMessage <- gtfs_realtime(response)
-#' lst <- gtfs_tripUpdates(FeedMessage)
+#' lst <- gtfs_tripUpdates(gtfs_realtime(response, content = "FeedMessage"))
 #' }
 #'
 #' @export
 gtfs_tripUpdates <- function(FeedMessage){
+
+	## validate FeedMessage
+	if(!"transit_realtime.FeedMessage" %in% attributes(FeedMessage))
+		stop("FeedMessage must be a FeedMesssage response")
+
 
 	trip_update_idx <- lapply(FeedMessage$entity, function(x) { length(x[['trip_update']]) > 0 })
 #	vehicle_update_idx <- lapply(FeedMessage$entity, function(x) { length(x[['vehicle']]) > 0 })
@@ -102,3 +122,26 @@ gtfs_tripUpdates <- function(FeedMessage){
 
 	})
 }
+
+
+
+
+# gtfs_realtimeData.transit_realtime.Alert <- function(){
+# 	print("getting Alert data")
+# }
+#
+# gtfs_realtimeData.transit_realtime.FeedMessage <- function(resposne){
+# 	print("getting FeedMessage data")
+# 	gtfs_tripUpdates(response)
+# }
+
+
+
+validate_response <- function(response){
+	if(response[['status_code']] != 200){
+		warning("The response did not have a status code of 200")
+	}
+}
+
+
+

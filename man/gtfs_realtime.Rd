@@ -4,12 +4,34 @@
 \alias{gtfs_realtime}
 \title{GTFS real time}
 \usage{
-gtfs_realtime(response)
+gtfs_realtime(response, content = c("FeedMessage", "Alert", "EntitySelector",
+  "FeedEntity", "FeedHeader", "VehiclePosition", "TimeRange",
+  "TranslateedString", "TripDescriptor", "TripUpdate",
+  "TripUpdate.StopTimeEvent", "TripUpdate.StopTimeUpdate", "VehicleDescriptor",
+  "Vehicle"))
 }
 \arguments{
 \item{response}{binary response body}
+
+\item{content}{String specifying which section of the response to return}
+}
+\value{
+FeedMessage RProtoBuf object containing the feed message
 }
 \description{
-Parses the response from a GTFS real-time feed
+Parses the raw response from a GTFS real-time feed
+}
+\examples{
+\dontrun{
+## South-East Queensland
+url <- "https://gtfsrt.api.translink.com.au/Feed/SEQ"
+
+response <- httr::GET(url,
+httr::accept_json(),
+httr::add_headers('Authorization' = ''))
+
+feed <- gtfs_realtime(response, content = "FeedMessage")
+
+}
 }
 

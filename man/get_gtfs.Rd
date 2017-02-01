@@ -7,14 +7,26 @@
 get_gtfs(url, extract = TRUE)
 }
 \arguments{
-\item{url}{link to GTFS .zip}
+\item{url}{link to GTFS .zip file}
 
-\item{exctract}{logical indicating if the files should be extracted as data.frames into the global environment. If \code{FALSE} a list of data.frames is returned. If \code{TRUE} data.frames for each file are extracted into the Global Environment.}
+\item{extract}{logical indicating if the files should be extracted as data.frame objects into the global environment. If \code{FALSE} a list of data.frames is returned. If \code{TRUE} data.frames for each file are extracted into the Global Environment.}
 }
 \value{
 list of dataframes, one for each .txt file
 }
 \description{
 Downloads and extracts GTFS static data
+}
+\examples{
+\dontrun{
+
+# download the GTFS feed for Melbourne, Australia
+# using the link at transitfeeds.com
+
+url <- "https://transitfeeds.com/p/ptv/497/latest/download"
+get_gtfs(url = url, extract = TRUE)
+
+}
+
 }
 

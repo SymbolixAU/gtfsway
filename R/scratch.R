@@ -131,7 +131,23 @@
 # lst[[45]]
 
 
-##
+# url <- "https://gtfsrt.api.translink.com.au/Feed/SEQ"
+# response <- httr::GET(url)
+#
+#
+#
+# fm <-	gtfs_realtime(response, content = "Alert")
+#
+# str(fm)
+#
+# fm@type
+#
+# lst <- gtfs_tripUpdates(fm)
+
+
+
+
+
 
 
 

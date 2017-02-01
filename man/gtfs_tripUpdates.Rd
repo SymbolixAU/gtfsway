@@ -13,7 +13,7 @@ gtfs_tripUpdates(FeedMessage)
 list of \code{data.table} trip update tables
 }
 \description{
-Returns a list of trip update information
+Returns a list of trip update information given a FeedMessage input
 }
 \examples{
 \dontrun{
@@ -25,8 +25,7 @@ response <- httr::GET(url,
 httr::accept_json(),
 httr::add_headers('Authorization' = ''))
 
-FeedMessage <- gtfs_realtime(response)
-lst <- gtfs_tripUpdates(FeedMessage)
+lst <- gtfs_tripUpdates(gtfs_realtime(response, content = "FeedMessage"))
 }
 
 }
