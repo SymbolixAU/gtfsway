@@ -106,7 +106,9 @@ gtfs_tripUpdates <- function(FeedMessage){
 				stop_sequence = y[['stop_sequence']],
 				stop_id = y[['stop_id']],
 				arrival_time = y[['arrival']][['time']],
-				departure_time = y[['departure']][['time']]
+				arrival_delay = y[['arrival']][['delay']],
+				departure_time = y[['departure']][['time']],
+				departure_delay = y[['departure']][['delay']]
 			))
 		})
 		dt_stop_time_update <- data.table::rbindlist(stop_time_update, use.names = T, fill = T)
