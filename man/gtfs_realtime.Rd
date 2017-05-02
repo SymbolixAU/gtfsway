@@ -34,4 +34,3 @@ feed <- gtfs_realtime(response, content = "FeedMessage")
 
 }
 }
-

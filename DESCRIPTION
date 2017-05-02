@@ -13,7 +13,7 @@ Imports:
     RProtoBuf,
     data.table (>= 1.9.8)
 BugReports: https://github.com/SymbolixAU/gtfsway/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
     testthat

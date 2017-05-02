@@ -29,4 +29,3 @@ get_gtfs(url = url, extract = TRUE)
 }
 
 }
-

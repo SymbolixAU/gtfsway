@@ -136,7 +136,7 @@
 #
 #
 #
-# fm <-	gtfs_realtime(response, content = "Alert")
+# FeedMessage <-	gtfs_realtime(response, content = "FeedMessage")
 #
 # str(fm)
 #

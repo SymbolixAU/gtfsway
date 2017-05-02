@@ -126,6 +126,51 @@ gtfs_tripUpdates <- function(FeedMessage){
 }
 
 
+#' GTFS Vehicle Position
+#'
+#' Returns a list of vehicle position information given a FeedMessage input
+#'
+#' @param FeedMessage returned from \link{gtfs_realtime}
+#' @return list of \code{data.table} vehicle position tables
+#' @examples
+#' \dontrun{
+#'
+#' ## South-East Queensland
+#' url <- "https://gtfsrt.api.translink.com.au/Feed/SEQ"
+#'
+#' response <- httr::GET(url,
+#' httr::accept_json(),
+#' httr::add_headers('Authorization' = ''))
+#'
+#' lst <- gtfs_vehiclePosition(gtfs_realtime(response, content = "FeedMessage"))
+#' }
+#'
+#' @export
+gtfs_vehiclePosition <- function(FeedMessage){
+
+	## validate FeedMessage
+	if(!"transit_realtime.FeedMessage" %in% attributes(FeedMessage))
+		stop("FeedMessage must be a FeedMesssage response")
+
+	   vehicle_update_idx <- lapply(FeedMessage$entity, function(x) { length(x[['vehicle']]) > 0 })
+
+	   vehicle_positions <- FeedMessage$entity[which(vehicle_update_idx == T)]
+
+	   lst <- lapply(vehicle_positions, function(x){
+
+	   	return(
+	   		data.table::data.table(
+			   	trip_id = x[['vehicle']][['trip']][['trip_id']],
+			   	route_id = x[['vehicle']][['trip']][['route_id']],
+			   	lat = x[['vehicle']][['position']][['latitude']], ## required
+			   	lon = x[['vehicle']][['position']][['longitude']], ## required
+			   	current_status = x[['vehicle']][['current_status']],
+			   	timestamp = x[['vehicle']][['timestamp']],
+			   	vehicle_id = x[['vehicle']][['vehicle']][['id']]
+		   	)
+	   	)
+	   })
+}
 
 
 # gtfs_realtimeData.transit_realtime.Alert <- function(){
